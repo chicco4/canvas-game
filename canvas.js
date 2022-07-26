@@ -38,7 +38,6 @@ addEventListener("mousemove", (event) => {
 addEventListener("resize", () => {
   canvas.width = innerWidth;
   canvas.height = innerHeight;
-
   init();
 });
 
@@ -65,11 +64,12 @@ class Player {
 }
 
 class Projectile {
-  constructor(x, y, radius, color) {
+  constructor(x, y, radius, color, velocity) {
     this.x = x;
     this.y = y;
     this.radius = radius;
     this.color = color;
+    this.velocity = velocity;
   }
 
   draw() {
@@ -82,27 +82,42 @@ class Projectile {
 
   update() {
     this.draw();
+    this.x += this.velocity.x;
+    this.y += this.velocity.y;
   }
 }
-
-// Implementation
-let objects;
+let projectiles;
+let player;
 function init() {
-  objects = [];
-
-  for (let i = 0; i < 400; i++) {
-    // objects.push()
-  }
+  projectiles = [];
+  player = new Player(canvas.width / 2, canvas.height / 2, 20, "blue");
 }
+
+addEventListener("click", function (event) {
+  console.log("click");
+  let angle = Math.atan2(
+    event.clientY - canvas.height / 2,
+    event.clientX - canvas.width / 2
+  );
+  let power = 10;
+  let velocity = {
+    x: Math.cos(angle) * power,
+    y: Math.sin(angle) * power,
+  };
+  projectiles.push(
+    new Projectile(canvas.width / 2, canvas.height / 2, 3, "red", velocity)
+  );
+});
 
 // Animation Loop
 function animate() {
   requestAnimationFrame(animate);
   c.clearRect(0, 0, canvas.width, canvas.height);
 
-  // objects.forEach(object => {
-  //  object.update()
-  // })
+  player.update();
+  projectiles.forEach((projectile) => {
+    projectile.update();
+  });
 }
 
 init();

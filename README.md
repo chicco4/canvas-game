@@ -4,8 +4,8 @@ A simple vanilla canvas-game made without npm modules
 
 ### checklist
 
-- [ ] create a player
-- [ ] shoot projectiles
+- [x] create a player
+- [x] shoot projectiles
 - [ ] create enemies
 - [ ] detect collision on enemy / projectile hit
 - [ ] detect collision on enemy / player hit
