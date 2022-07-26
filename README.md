@@ -1,6 +1,6 @@
 # canvas-game
 
-A simple canvas-game made without npm modules
+A simple vanilla canvas-game made without npm modules
 
 ### checklist
 
