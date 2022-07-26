@@ -117,7 +117,7 @@ let projectiles;
 let enemies;
 
 function init() {
-  player = new Player(canvas.width / 2, canvas.height / 2, 30, "blue");
+  player = new Player(canvas.width / 2, canvas.height / 2, 20, "white");
   projectiles = [];
   enemies = [];
 }
@@ -128,13 +128,13 @@ addEventListener("click", function (event) {
     event.clientY - canvas.height / 2,
     event.clientX - canvas.width / 2
   );
-  let power = 10;
+  let power = 5;
   let velocity = {
     x: Math.cos(angle) * power,
     y: Math.sin(angle) * power,
   };
   projectiles.push(
-    new Projectile(canvas.width / 2, canvas.height / 2, 3, "red", velocity)
+    new Projectile(canvas.width / 2, canvas.height / 2, 3, "white", velocity)
   );
 });
 
@@ -156,8 +156,8 @@ function spawnEnemies() {
       x: Math.cos(angle) * power,
       y: Math.sin(angle) * power,
     };
-
-    enemies.push(new Enemy(x, y, radius, "grey", velocity));
+    let color = `hsl(${Math.random() * 360},50%,50%)`;
+    enemies.push(new Enemy(x, y, radius, color, velocity));
   }, 1000);
 }
 
@@ -165,11 +165,24 @@ function spawnEnemies() {
 let animationId;
 function animate() {
   animationId = requestAnimationFrame(animate);
-  c.clearRect(0, 0, canvas.width, canvas.height);
+  c.fillStyle = "rgba(0,0,0,0.1)";
+  c.fillRect(0, 0, canvas.width, canvas.height);
 
   player.update();
-  projectiles.forEach((projectile) => {
+  projectiles.forEach((projectile, i) => {
     projectile.update();
+
+    //remove from edges of the screen
+    if (
+      projectile.x + projectile.radius < 0 ||
+      projectile.x - projectile.radius > canvas.width ||
+      projectile.y + projectile.radius < 0 ||
+      projectile.y - projectile.radius > canvas.height
+    ) {
+      setTimeout(() => {
+        projectiles.splice(i, 1);
+      }, 0);
+    }
   });
   enemies.forEach((enemy, i) => {
     enemy.update();
