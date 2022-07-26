@@ -15,7 +15,6 @@ function distance(x1, y1, x2, y2) {
 }
 
 /* MAIN STUFF */
-
 const canvas = document.querySelector("canvas");
 const c = canvas.getContext("2d");
 
@@ -198,9 +197,13 @@ function animate() {
       let dist = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y);
       if (dist - enemy.radius - projectile.radius < 1) {
         //rallento di un frame per evitare che provi
-        if (enemy.radius > 20) {
-          enemy.radius -= 10;
-          projectiles.splice(i, 1);
+        if (enemy.radius - 15 > 5) {
+          gsap.to(enemy, {
+            radius: enemy.radius - 15,
+          });
+          setTimeout(() => {
+            projectiles.splice(i, 1);
+          });
         } else {
           setTimeout(() => {
             enemies.splice(i, 1);
