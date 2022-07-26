@@ -140,7 +140,7 @@ addEventListener("click", function (event) {
 
 function spawnEnemies() {
   setInterval(() => {
-    let radius = Math.random() * (30 - 10) + 10;
+    let radius = Math.random() * (40 - 20) + 20;
     let x;
     let y;
     if (Math.random() < 0.5) {
@@ -186,21 +186,27 @@ function animate() {
   });
   enemies.forEach((enemy, i) => {
     enemy.update();
+
+    //when enemy touch player -> enemy win
     let dist = Math.hypot(player.x - enemy.x, player.y - enemy.y);
     if (dist - enemy.radius - player.radius < 1) {
-      console.log("enemy win");
       cancelAnimationFrame(animationId);
     }
 
     projectiles.forEach((projectile, j) => {
+      //when projectiles touch enemy
       let dist = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y);
-      //object touch
       if (dist - enemy.radius - projectile.radius < 1) {
         //rallento di un frame per evitare che provi
-        setTimeout(() => {
-          enemies.splice(i, 1);
-          projectiles.splice(j, 1);
-        }, 0);
+        if (enemy.radius > 20) {
+          enemy.radius -= 10;
+          projectiles.splice(i, 1);
+        } else {
+          setTimeout(() => {
+            enemies.splice(i, 1);
+            projectiles.splice(j, 1);
+          }, 0);
+        }
       }
     });
   });

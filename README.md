@@ -10,7 +10,7 @@ A simple vanilla canvas-game made without npm modules
 - [x] detect collision on enemy / projectile hit
 - [x] detect collision on enemy / player hit
 - [x] colorize game
-- [ ] shrink enemies on hit
+- [x] shrink enemies on hit
 - [ ] create particle explosion on hit
 - [ ] add score
 - [ ] add game over UI
