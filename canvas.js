@@ -110,15 +110,49 @@ class Enemy {
   }
 }
 
+const friction = 0.98;
+class Particle {
+  constructor(x, y, radius, color, velocity) {
+    this.x = x;
+    this.y = y;
+    this.radius = radius;
+    this.color = color;
+    this.velocity = velocity;
+    this.alpha = 1;
+  }
+
+  draw() {
+    c.save();
+    c.globalAlpha = this.alpha;
+    c.beginPath();
+    c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+    c.fillStyle = this.color;
+    c.fill();
+    c.closePath();
+    c.restore();
+  }
+
+  update() {
+    this.draw();
+    this.velocity.x *= friction;
+    this.velocity.y *= friction;
+    this.x += this.velocity.x;
+    this.y += this.velocity.y;
+    this.alpha -= 0.01;
+  }
+}
+
 //implementation
 let player;
 let projectiles;
 let enemies;
+let particles;
 
 function init() {
   player = new Player(canvas.width / 2, canvas.height / 2, 20, "white");
   projectiles = [];
   enemies = [];
+  particles = [];
 }
 
 //shoot projectiles
@@ -168,6 +202,14 @@ function animate() {
   c.fillRect(0, 0, canvas.width, canvas.height);
 
   player.update();
+  particles.forEach((particle, k) => {
+    if (particle.alpha <= 0) {
+      particles.splice(k, 1);
+    } else {
+      particle.update();
+    }
+  });
+
   projectiles.forEach((projectile, i) => {
     projectile.update();
 
@@ -196,10 +238,28 @@ function animate() {
       //when projectiles touch enemy
       let dist = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y);
       if (dist - enemy.radius - projectile.radius < 1) {
+        //DOESNT WORK
+        let counter = 0;
+        while (counter < enemy.radius * 2) {
+          particles.push(
+            new Particle(
+              projectile.x,
+              projectile.y,
+              Math.random() * 2,
+              enemy.color,
+              {
+                x: (Math.random() - 0.5) * (Math.random() * 6),
+                y: (Math.random() - 0.5) * (Math.random() * 6),
+              }
+            )
+          );
+          counter++;
+        }
+
         //rallento di un frame per evitare che provi
-        if (enemy.radius - 15 > 5) {
+        if (enemy.radius - 10 > 15) {
           gsap.to(enemy, {
-            radius: enemy.radius - 15,
+            radius: enemy.radius - 10,
           });
           setTimeout(() => {
             projectiles.splice(i, 1);
