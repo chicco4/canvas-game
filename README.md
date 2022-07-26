@@ -6,7 +6,7 @@ A simple vanilla canvas-game made without npm modules
 
 - [x] create a player
 - [x] shoot projectiles
-- [ ] create enemies
+- [x] create enemies
 - [ ] detect collision on enemy / projectile hit
 - [ ] detect collision on enemy / player hit
 - [ ] colorize game

@@ -86,15 +86,44 @@ class Projectile {
     this.y += this.velocity.y;
   }
 }
-let projectiles;
-let player;
-function init() {
-  projectiles = [];
-  player = new Player(canvas.width / 2, canvas.height / 2, 20, "blue");
+
+class Enemy {
+  constructor(x, y, radius, color, velocity) {
+    this.x = x;
+    this.y = y;
+    this.radius = radius;
+    this.color = color;
+    this.velocity = velocity;
+  }
+
+  draw() {
+    c.beginPath();
+    c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+    c.fillStyle = this.color;
+    c.fill();
+    c.closePath();
+  }
+
+  update() {
+    this.draw();
+    this.x += this.velocity.x;
+    this.y += this.velocity.y;
+  }
 }
 
+//implementation
+let player;
+let projectiles;
+let enemies;
+
+function init() {
+  player = new Player(canvas.width / 2, canvas.height / 2, 30, "blue");
+  projectiles = [];
+  enemies = [];
+}
+
+//shoot projectiles
 addEventListener("click", function (event) {
-  console.log("click");
   let angle = Math.atan2(
     event.clientY - canvas.height / 2,
     event.clientX - canvas.width / 2
@@ -109,6 +138,30 @@ addEventListener("click", function (event) {
   );
 });
 
+function spawnEnemies() {
+  setInterval(() => {
+    console.log("ENEMY SPOTTED");
+    let radius = Math.random() * (30 - 10) + 10;
+    let x;
+    let y;
+    if (Math.random() < 0.5) {
+      x = Math.random() < 0.5 ? 0 - radius : canvas.width + radius;
+      y = Math.random() * canvas.height;
+    } else {
+      x = Math.random() * canvas.width;
+      y = Math.random() < 0.5 ? 0 - radius : canvas.height + radius;
+    }
+    let angle = Math.atan2(canvas.height / 2 - y, canvas.width / 2 - x);
+    let power = 1.2;
+    let velocity = {
+      x: Math.cos(angle) * power,
+      y: Math.sin(angle) * power,
+    };
+
+    enemies.push(new Enemy(x, y, radius, "grey", velocity));
+  }, 1000);
+}
+
 // Animation Loop
 function animate() {
   requestAnimationFrame(animate);
@@ -118,7 +171,11 @@ function animate() {
   projectiles.forEach((projectile) => {
     projectile.update();
   });
+  enemies.forEach((enemy) => {
+    enemy.update();
+  });
 }
 
 init();
 animate();
+spawnEnemies();
