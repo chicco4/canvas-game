@@ -140,7 +140,6 @@ addEventListener("click", function (event) {
 
 function spawnEnemies() {
   setInterval(() => {
-    console.log("ENEMY SPOTTED");
     let radius = Math.random() * (30 - 10) + 10;
     let x;
     let y;
@@ -171,8 +170,19 @@ function animate() {
   projectiles.forEach((projectile) => {
     projectile.update();
   });
-  enemies.forEach((enemy) => {
+  enemies.forEach((enemy, i) => {
     enemy.update();
+    projectiles.forEach((projectile, j) => {
+      let dist = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y);
+      //object touch
+      if (dist - enemy.radius - projectile.radius < 1) {
+        //rallento di un frame per evitare che provi
+        setTimeout(() => {
+          enemies.splice(i, 1);
+          projectiles.splice(j, 1);
+        }, 0);
+      }
+    });
   });
 }
 
