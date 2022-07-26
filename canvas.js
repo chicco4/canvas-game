@@ -157,6 +157,7 @@ function init() {
   enemies = [];
   particles = [];
   score = 0;
+  scoreEl.innerHTML = "Score: 0"
 }
 
 //shoot projectiles

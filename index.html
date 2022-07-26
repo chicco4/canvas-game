@@ -26,15 +26,23 @@
         div {
             position: fixed;
             color: white;
-            padding-top: 10px;
-            padding-left: 10px;
+            margin-top: 10px;
+            margin-left: 10px;
+            user-select: none;
+        }
+
+        button {
+            position: fixed;
+            margin-top: 10px;
+            margin-left: 100px;
             user-select: none;
         }
     </style>
 </head>
 
 <body>
-    <div><span>Score: 0</div>
+    <div>Score: 0</div>
+    <button onclick="init()">Restart</button>
     <canvas></canvas>
 </body>
 

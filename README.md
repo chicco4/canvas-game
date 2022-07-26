@@ -13,6 +13,6 @@ A simple vanilla canvas-game made without npm modules
 - [x] shrink enemies on hit
 - [x] create particle explosion on hit
 - [x] add score
-- [ ] add game over UI
-- [ ] add restart button
-- [ ] add start game button
+- [x] add game over UI
+- [x] add restart button
+- [x] add start game button
