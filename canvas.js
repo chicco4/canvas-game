@@ -15,6 +15,8 @@ function distance(x1, y1, x2, y2) {
 }
 
 /* MAIN STUFF */
+const scoreEl = document.querySelector("div");
+
 const canvas = document.querySelector("canvas");
 const c = canvas.getContext("2d");
 
@@ -147,12 +149,14 @@ let player;
 let projectiles;
 let enemies;
 let particles;
+let score;
 
 function init() {
   player = new Player(canvas.width / 2, canvas.height / 2, 20, "white");
   projectiles = [];
   enemies = [];
   particles = [];
+  score = 0;
 }
 
 //shoot projectiles
@@ -167,7 +171,7 @@ addEventListener("click", function (event) {
     y: Math.sin(angle) * power,
   };
   projectiles.push(
-    new Projectile(canvas.width / 2, canvas.height / 2, 3, "white", velocity)
+    new Projectile(canvas.width / 2, canvas.height / 2, 6, "white", velocity)
   );
 });
 
@@ -238,7 +242,11 @@ function animate() {
       //when projectiles touch enemy
       let dist = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y);
       if (dist - enemy.radius - projectile.radius < 1) {
-        //DOESNT WORK
+        //increase score
+        score += 10;
+        scoreEl.innerHTML = "Score: " + score;
+
+        //explosion
         let counter = 0;
         while (counter < enemy.radius * 2) {
           particles.push(
@@ -257,7 +265,7 @@ function animate() {
         }
 
         //rallento di un frame per evitare che provi
-        if (enemy.radius - 10 > 15) {
+        if (enemy.radius - 10 > 10) {
           gsap.to(enemy, {
             radius: enemy.radius - 10,
           });
@@ -266,6 +274,9 @@ function animate() {
           });
         } else {
           setTimeout(() => {
+            //increase score
+            score += 100;
+            scoreEl.innerHTML = "Score: " + score;
             enemies.splice(i, 1);
             projectiles.splice(j, 1);
           }, 0);
