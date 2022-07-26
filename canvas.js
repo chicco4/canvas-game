@@ -162,8 +162,9 @@ function spawnEnemies() {
 }
 
 // Animation Loop
+let animationId;
 function animate() {
-  requestAnimationFrame(animate);
+  animationId = requestAnimationFrame(animate);
   c.clearRect(0, 0, canvas.width, canvas.height);
 
   player.update();
@@ -172,6 +173,12 @@ function animate() {
   });
   enemies.forEach((enemy, i) => {
     enemy.update();
+    let dist = Math.hypot(player.x - enemy.x, player.y - enemy.y);
+    if (dist - enemy.radius - player.radius < 1) {
+      console.log("enemy win");
+      cancelAnimationFrame(animationId);
+    }
+
     projectiles.forEach((projectile, j) => {
       let dist = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y);
       //object touch
