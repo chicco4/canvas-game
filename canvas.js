@@ -160,6 +160,10 @@ function init() {
   scoreEl.innerHTML = "Score: 0"
 }
 
+function restart(){
+  document.location.reload();
+}
+
 //shoot projectiles
 addEventListener("click", function (event) {
   let angle = Math.atan2(
